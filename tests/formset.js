@@ -1,7 +1,7 @@
 /*global QUnit:false, module:false, test:false, asyncTest:false, expect:false*/
 /*global start:false, stop:false, ok:false, equal:false, notEqual:false, deepEqual:false*/
 /*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
-/*global jQuery:false*/
+/*global jQuery:false, sinon:false*/
 
 (function ($) {
 
@@ -63,6 +63,20 @@
       'form-1-email=&form-1-textarea=',
       'new form is blank'
     );
+  });
+
+  test('test add button selector', function () {
+    var element, formset;
+    expect(2);
+    element = $('#single-form').djangoFormset({
+      formSelector: 'tr',
+      addSelector: '.add-form',
+    });
+    formset = element.data('djangoFormset');
+    sinon.spy(formset, "addForm");
+    $('.add-form').trigger('click');
+    ok(formset.addForm.calledOnce);
+    equal(formset.addForm.firstCall.args.length, 0, 'addForm called without argument');
   });
 
 }(jQuery));
