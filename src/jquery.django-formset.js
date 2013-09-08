@@ -74,6 +74,7 @@
     this.addForm = function () {
       var form = templateForm.clone(true),
           formCount = parseInt(totalField.val(), 10);
+      if (formCount >= parseInt(maxNumField.val(), 10)) return;  // Don't make more than maximum
       forms.filter(':last').after(form);
       form.find(':input').each(function () {
         updateFieldIndex($(this), options.prefix, formCount);

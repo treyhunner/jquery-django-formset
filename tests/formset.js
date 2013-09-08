@@ -31,4 +31,17 @@
     equal(this.$('tr:last input').prop('name'), 'form-2-input', 'index 2');
   });
 
+  test('test maximum forms', function () {
+    var i;
+    expect(4);
+    for (i = 0; i < 10; i++) {
+      this.formset.addForm();
+    }
+    equal(this.$('tr').length, 10, 'ten formsets');
+    equal(this.$('tr:last input').prop('name'), 'form-9-input', 'index 9');
+    this.formset.addForm();
+    equal(this.$('tr').length, 10, 'still only ten formsets');
+    equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
+  });
+
 }(jQuery));
