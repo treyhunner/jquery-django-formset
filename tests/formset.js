@@ -7,43 +7,6 @@
 
   'use strict';
 
-  module("Test $.djangoFormset#addForm", {
-    setup: function () {
-      this.element = $('#single-form').djangoFormset({
-        formSelector: 'tr',
-      });
-      this.formset = this.element.data('djangoFormset');
-      this.$ = function () { return this.element.find.apply(this.element, arguments); };
-    },
-    teardown: function () {
-    }
-  });
-
-  test('form index incrementing', function () {
-    expect(6);
-    equal(this.$('tr').length, 1, 'one formset');
-    equal(this.$('tr:last input').prop('name'), 'form-0-input', 'index 0');
-    this.formset.addForm();
-    equal(this.$('tr').length, 2, 'two formsets');
-    equal(this.$('tr:last input').prop('name'), 'form-1-input', 'index 1');
-    this.formset.addForm();
-    equal(this.$('tr').length, 3, 'three formsets');
-    equal(this.$('tr:last input').prop('name'), 'form-2-input', 'index 2');
-  });
-
-  test('test maximum forms', function () {
-    var i;
-    expect(4);
-    for (i = 0; i < 10; i++) {
-      this.formset.addForm();
-    }
-    equal(this.$('tr').length, 10, 'ten formsets');
-    equal(this.$('tr:last input').prop('name'), 'form-9-input', 'index 9');
-    this.formset.addForm();
-    equal(this.$('tr').length, 10, 'still only ten formsets');
-    equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
-  });
-
   module("Test $.djangoFormset#init");
 
   test('test template form fields cleared', function () {
@@ -95,6 +58,43 @@
     $('.add-form').trigger('click');
     ok(formset.addForm.calledOnce);
     equal(formset.addForm.firstCall.args.length, 0, 'addForm called without argument');
+  });
+
+  module("Test $.djangoFormset#addForm", {
+    setup: function () {
+      this.element = $('#single-form').djangoFormset({
+        formSelector: 'tr',
+      });
+      this.formset = this.element.data('djangoFormset');
+      this.$ = function () { return this.element.find.apply(this.element, arguments); };
+    },
+    teardown: function () {
+    }
+  });
+
+  test('form index incrementing', function () {
+    expect(6);
+    equal(this.$('tr').length, 1, 'one formset');
+    equal(this.$('tr:last input').prop('name'), 'form-0-input', 'index 0');
+    this.formset.addForm();
+    equal(this.$('tr').length, 2, 'two formsets');
+    equal(this.$('tr:last input').prop('name'), 'form-1-input', 'index 1');
+    this.formset.addForm();
+    equal(this.$('tr').length, 3, 'three formsets');
+    equal(this.$('tr:last input').prop('name'), 'form-2-input', 'index 2');
+  });
+
+  test('test maximum forms', function () {
+    var i;
+    expect(4);
+    for (i = 0; i < 10; i++) {
+      this.formset.addForm();
+    }
+    equal(this.$('tr').length, 10, 'ten formsets');
+    equal(this.$('tr:last input').prop('name'), 'form-9-input', 'index 9');
+    this.formset.addForm();
+    equal(this.$('tr').length, 10, 'still only ten formsets');
+    equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
   });
 
 }(jQuery));
