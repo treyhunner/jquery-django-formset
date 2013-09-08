@@ -1,0 +1,10 @@
+{
+  "globalstrict": false,
+  "strict": true,
+  "undef": true,
+  "browser": true,
+  "jquery": true,
+  "white": true,
+  "maxlen": 100,
+  "indent": 2
+}

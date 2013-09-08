@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>jQuery Django Formset Test Suite</title>
+  <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+  <script src="vendor/jquery.min.js"></script>
+  <!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
+  <link rel="stylesheet" href="vendor/qunit.css" media="screen">
+  <script src="vendor/qunit.js"></script>
+  <!-- Load local js. -->
+  <script src="../src/jquery.django-formset.js"></script>
+  <!-- Load local tests. -->
+  <script src="formset.js"></script>
+  <!-- Removing access to jQuery and $. But it'll still be available as _$, if
+       you REALLY want to mess around with jQuery in the console. -->
+  <script>window._$ = jQuery.noConflict(true);</script>
+</head>
+<body>
+  <h1 id="qunit-header">jQuery Django Formset Test Suite</h1>
+  <h2 id="qunit-banner"></h2>
+  <div id="qunit-testrunner-toolbar"></div>
+  <h2 id="qunit-userAgent"></h2>
+  <ol id="qunit-tests"></ol>
+  <div id="qunit-fixture">
+
+    <div id="single-form">
+      <input type="hidden" id="id_form-TOTAL_FORMS" value="1">
+      <input type="hidden" id="id_form-MAX_NUM_FORMS" value="10">
+      <table>
+        <tr>
+          <td>
+            <input type="date" name="form-0-input">
+            <select name="form-0-select"></select>
+            <textarea name="form-0-textarea"></textarea>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</body>
+</html>
