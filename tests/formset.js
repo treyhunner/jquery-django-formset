@@ -65,6 +65,24 @@
     );
   });
 
+  test('test prefix specified', function () {
+    var element, formset;
+    expect(6);
+    element = $('#form-with-custom-prefix').djangoFormset({
+      formSelector: 'tr',
+      prefix: 'prefix',
+    });
+    formset = element.data('djangoFormset');
+    equal(element.find('tr').length, 1, 'one formset');
+    equal(element.find('tr:last input').prop('name'), 'prefix-0-input', 'index 0');
+    formset.addForm();
+    equal(element.find('tr').length, 2, 'two formsets');
+    equal(element.find('tr:last input').prop('name'), 'prefix-1-input', 'index 1');
+    formset.addForm();
+    equal(element.find('tr').length, 2, 'still only two formsets');
+    equal(element.find('tr:last input').prop('name'), 'prefix-1-input', 'index 1 still');
+  });
+
   test('test add button selector', function () {
     var element, formset;
     expect(2);

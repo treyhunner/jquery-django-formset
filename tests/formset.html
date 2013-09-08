@@ -26,9 +26,10 @@
   <ol id="qunit-tests"></ol>
   <div id="qunit-fixture">
 
+    <input type="hidden" id="id_form-TOTAL_FORMS" value="1">
+    <input type="hidden" id="id_form-MAX_NUM_FORMS" value="10">
+
     <div id="single-form">
-      <input type="hidden" id="id_form-TOTAL_FORMS" value="1">
-      <input type="hidden" id="id_form-MAX_NUM_FORMS" value="10">
       <table>
         <tr>
           <td>
@@ -41,8 +42,6 @@
     </div>
 
     <div id="form-with-data">
-      <input type="hidden" id="id_form-TOTAL_FORMS" value="1">
-      <input type="hidden" id="id_form-MAX_NUM_FORMS" value="10">
       <table>
         <tr>
           <td>
@@ -55,6 +54,21 @@
         </tr>
       </table>
     </div>
+
+    <div id="form-with-custom-prefix">
+      <input type="hidden" id="id_prefix-TOTAL_FORMS" value="1">
+      <input type="hidden" id="id_prefix-MAX_NUM_FORMS" value="2">
+      <table>
+        <tr>
+          <td>
+            <input type="date" name="prefix-0-input">
+            <select name="prefix-0-select"></select>
+            <textarea name="prefix-0-textarea"></textarea>
+          </td>
+        </tr>
+      </table>
+    </div>
+
 
     <a href="http://example.com" class="add-form">Add another</a>
 
