@@ -17,7 +17,6 @@
   $.djangoFormset = function (parent, options) {
     var totalField = $('#id_' + options.prefix + '-TOTAL_FORMS'),
         maxNumField = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
-        forms = parent.find(options.formSelector),
         formset = this,
         templateForm;
 
@@ -39,12 +38,11 @@
           return false;
         });
       }
-      form.data('djangoFormset', formset);
     }
 
     this.init = function () {
       // Listen to delete button click events for each form
-      forms.each(function () { prepareForm($(this)); });
+      this.getForms().each(function () { prepareForm($(this)); });
 
       // Listen to add button click event
       if (options.addSelector) {
@@ -55,12 +53,12 @@
       }
 
       // Set teplate form
-      templateForm = forms.filter(':last').clone(true);
+      templateForm = this.getForms().filter(':last').clone(true);
       clearForm(templateForm);
     };
 
     this.getForms = function () {
-      return forms.find(':data(djangoFormset)');
+      return parent.find(options.formSelector);
     };
 
     this.deleteForm = function () {
@@ -75,13 +73,12 @@
       var form = templateForm.clone(true),
           formCount = parseInt(totalField.val(), 10);
       if (formCount >= parseInt(maxNumField.val(), 10)) return;  // Don't make more than maximum
-      forms.filter(':last').after(form);
+      this.getForms().filter(':last').after(form);
       form.find(':input').each(function () {
         updateFieldIndex($(this), options.prefix, formCount);
       });
       totalField.val(formCount + 1);
       prepareForm(form);
-      forms = parent.find(options.formSelector);
     };
 
     this.init();
