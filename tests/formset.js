@@ -44,4 +44,25 @@
     equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
   });
 
+  module("Test $.djangoFormset#init");
+
+  test('test template form fields cleared', function () {
+    var element, formset;
+    expect(3);
+    element = $('#form-with-data').djangoFormset({formSelector: 'tr'});
+    formset = element.data('djangoFormset');
+    formset.addForm();
+    equal(element.find('tr').length, 2, 'two formsets');
+    deepEqual(
+      element.find('tr:first :input').serialize(),
+      'form-0-email=example%40example.com&form-0-checkbox=1&form-0-textarea=',
+      'initial form is filled'
+    );
+    deepEqual(
+      element.find('tr:last :input').serialize(),
+      'form-1-email=&form-1-textarea=',
+      'new form is blank'
+    );
+  });
+
 }(jQuery));
