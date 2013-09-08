@@ -54,10 +54,25 @@
       addSelector: '.add-form',
     });
     formset = element.data('djangoFormset');
-    sinon.spy(formset, "addForm");
+    sinon.stub(formset, "addForm", function () {});
     $('.add-form').trigger('click');
     ok(formset.addForm.calledOnce);
     equal(formset.addForm.firstCall.args.length, 0, 'addForm called without argument');
+  });
+
+  test('test delete button selector', function () {
+    var element, formset;
+    expect(3);
+    element = $('#multiple-forms').djangoFormset({
+      formSelector: 'tr',
+      deleteSelector: '.delete-form',
+    });
+    formset = element.data('djangoFormset');
+    sinon.stub(formset, "deleteForm", function () {});
+    element.find('tr:last .delete-form').trigger('click');
+    ok(formset.deleteForm.calledOnce);
+    equal(formset.deleteForm.firstCall.args.length, 1, 'deleteForm called with 1 argument');
+    ok(formset.deleteForm.firstCall.args[0][0].isEqualNode(element.find('tr')[1]));
   });
 
   module("Test $.djangoFormset#addForm", {
