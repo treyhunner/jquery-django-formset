@@ -61,8 +61,7 @@
       return parent.find(options.formSelector);
     };
 
-    this.deleteForm = function () {
-      var form = $(this);
+    this.deleteForm = function (form) {
       form.find(':input[id$="-DELETE"]').prop('checked', true);
       form.hide();
       if (options.deleted) options.deleted.apply(formset, form);

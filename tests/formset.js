@@ -112,4 +112,24 @@
     equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
   });
 
+  module("Test $.djangoFormset#deleteForm", {
+    setup: function () {
+      this.element = $('#multiple-forms').djangoFormset({
+        formSelector: 'tr',
+      });
+      this.formset = this.element.data('djangoFormset');
+      this.$ = function () { return this.element.find.apply(this.element, arguments); };
+    },
+    teardown: function () {
+    }
+  });
+
+  test('form deleting checks DELETE checkbox', function () {
+    expect(3);
+    this.formset.deleteForm(this.$('tr:first'));
+    equal(this.$('tr').length, 2, 'two formsets still');
+    equal(this.$('tr:first input[id$=DELETE]').prop('checked'), true);
+    equal(this.$('tr:last input[id$=DELETE]').prop('checked'), false);
+  });
+
 }(jQuery));
