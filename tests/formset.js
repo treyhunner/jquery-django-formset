@@ -132,4 +132,39 @@
     equal(this.$('tr:last input[id$=DELETE]').prop('checked'), false);
   });
 
+  module("Test add/delete form callbacks");
+
+  test('Test added callback', function () {
+    var element, formset, callback;
+    expect(4);
+    callback = sinon.spy();
+    element = $('#multiple-forms').djangoFormset({
+      formSelector: 'tr',
+      added: callback,
+    });
+    formset = element.data('djangoFormset');
+    formset.addForm();
+    equal(element.find('tr').length, 3, 'three formsets');
+    ok(callback.calledOnce, 'added callback called exactly once');
+    ok(callback.args[0][0][0].isEqualNode(element.find('tr:last')[0]), 'called with new form');
+    equal(callback.thisValues[0], formset, 'callback called in context of formset');
+  });
+
+  test('Test deleted callback', function () {
+    var element, formset, callback;
+    expect(5);
+    callback = sinon.spy();
+    element = $('#multiple-forms').djangoFormset({
+      formSelector: 'tr',
+      deleted: callback,
+    });
+    formset = element.data('djangoFormset');
+    formset.deleteForm(element.find('tr:first'));
+    equal(element.find('tr').length, 2, 'two formsets still');
+    equal(element.find('tr:first input[id$=DELETE]').prop('checked'), true);
+    ok(callback.calledOnce, 'deleted callback called exactly once');
+    ok(callback.args[0][0][0].isEqualNode(element.find('tr:first')[0]), 'called with first form');
+    equal(callback.thisValues[0], formset, 'callback called in context of formset');
+  });
+
 }(jQuery));

@@ -64,8 +64,8 @@
     this.deleteForm = function (form) {
       form.find(':input[id$="-DELETE"]').prop('checked', true);
       form.hide();
-      if (options.deleted) options.deleted.apply(formset, form);
       totalField.val(formset.getForms().length);
+      if (options.deleted) options.deleted.call(formset, form);
     };
 
     this.addForm = function () {
@@ -78,6 +78,7 @@
       });
       totalField.val(formCount + 1);
       prepareForm(form);
+      if (options.added) options.added.call(formset, form);
     };
 
     this.init();
@@ -94,7 +95,9 @@
     prefix: 'form',
     formSelector: null,
     deleteSelector: null,
-    addSelector: null
+    addSelector: null,
+    added: null,
+    deleted: null
   };
 
 }(jQuery));
