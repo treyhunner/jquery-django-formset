@@ -29,6 +29,7 @@ module.exports = function (grunt) {
           ],
           instrumentedFiles: 'temp/',
           htmlReport: 'coverage',
+          lcovReport: 'coverage',
           linesThresholdPct: 100,
           statementsThresholdPct: 100,
           functionsThresholdPct: 100,
