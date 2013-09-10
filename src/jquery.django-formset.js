@@ -29,6 +29,7 @@
           field.val('');
         }
       });
+      form.find('.errorlist').remove();
     }
 
     function prepareForm(form) {

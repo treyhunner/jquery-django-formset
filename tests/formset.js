@@ -11,7 +11,7 @@
 
   test('test template form fields cleared', function () {
     var element, formset;
-    expect(3);
+    expect(5);
     element = $('#form-with-data').djangoFormset({formSelector: 'tr'});
     formset = element.data('djangoFormset');
     formset.addForm();
@@ -26,6 +26,8 @@
       'form-1-email=&form-1-textarea=',
       'new form is blank'
     );
+    equal(element.find('tr:first .errorlist').length, 1, 'errorlist present');
+    equal(element.find('tr:last .errorlist').length, 0, 'error list not present');
   });
 
   test('test prefix specified', function () {
