@@ -29,8 +29,8 @@
     <input type="hidden" id="id_form-TOTAL_FORMS" value="1">
     <input type="hidden" id="id_form-MAX_NUM_FORMS" value="10">
 
-    <div id="single-form">
-      <table>
+    <table>
+      <tbody id="single-form">
         <tr>
           <td>
             <input type="date" name="form-0-input">
@@ -39,11 +39,11 @@
             <a href="http://example.com" class="delete-form">X</a>
           </td>
         </tr>
-      </table>
-    </div>
+      </tbody>
+    </table>
 
-    <div id="form-with-template">
-      <table>
+    <table>
+      <tbody id="form-with-template">
         <tr class="form">
           <td>
             <select name="form-0-select">
@@ -60,11 +60,11 @@
             </select>
           </td>
         </tr>
-      </table>
-    </div>
+      </tbody>
+    </table>
 
-    <div id="form-with-external-template">
-      <table>
+    <table>
+      <tbody id="form-with-external-template">
         <tr>
           <td>
             <select name="form-0-select">
@@ -73,8 +73,8 @@
             </select>
           </td>
         </tr>
-      </table>
-    </div>
+      </tbody>
+    </table>
 
     <script type="template/html" class="external-empty-form">
       <td>
@@ -85,8 +85,8 @@
       </td>
     </script>
 
-    <div id="multiple-forms">
-      <table>
+    <table>
+      <tbody id="multiple-forms">
         <tr>
           <td>
             <input type="date" name="form-0-input">
@@ -101,11 +101,11 @@
             <a href="http://example.com" class="delete-form">X</a>
           </td>
         </tr>
-      </table>
-    </div>
+      </tbody>
+    </table>
 
-    <div id="form-with-data">
-      <table>
+    <table>
+      <tbody id="form-with-data">
         <tr>
           <td>
             <input type="email" name="form-0-email" value="example@example.com">
@@ -118,13 +118,13 @@
             <textarea name="form-0-textarea"></textarea>
           </td>
         </tr>
-      </table>
-    </div>
+      </tbody>
+    </table>
 
-    <div id="form-with-custom-prefix">
-      <input type="hidden" id="id_prefix-TOTAL_FORMS" value="1">
-      <input type="hidden" id="id_prefix-MAX_NUM_FORMS" value="2">
-      <table>
+    <input type="hidden" id="id_prefix-TOTAL_FORMS" value="1">
+    <input type="hidden" id="id_prefix-MAX_NUM_FORMS" value="2">
+    <table>
+      <tbody id="form-with-custom-prefix">
         <tr>
           <td>
             <input type="date" name="prefix-0-input">
@@ -132,8 +132,8 @@
             <textarea name="prefix-0-textarea"></textarea>
           </td>
         </tr>
-      </table>
-    </div>
+      </tbody>
+    </table>
 
     <a href="http://example.com" class="add-form">Add another</a>
 

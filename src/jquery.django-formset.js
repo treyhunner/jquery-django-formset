@@ -14,7 +14,7 @@
     });
   };
 
-  $.djangoFormset = function (parent, options) {
+  $.djangoFormset = function (element, options) {
     var formset = this, templateForm;
 
     function clearForm(form) {
@@ -31,7 +31,7 @@
 
     function prepareForm(form) {
       if (options.deleteSelector) {
-        form.find(options.deleteSelector).click(function () {
+        form.on('click', options.deleteSelector, function () {
           formset.deleteForm(form);
           return false;
         });
@@ -55,24 +55,24 @@
         templateForm.html($(options.emptyFormSelector).html());
         if (options.className) templateForm.addClass(options.className);
       } else {
-        templateForm = this.getForms().filter(':last').clone(true);
+        templateForm = this.getForms().filter(':last').clone(false);
         clearForm(templateForm);
       }
     };
 
     this.createForm = function () {
-      var form = templateForm.clone(true);
+      var form = templateForm.clone(false),
+          formCount = formset.totalForms();
       form.find(':input').each(function () {
-        updateFieldIndex($(this), options.prefix, formset.totalForms());
+        updateFieldIndex($(this), options.prefix, formCount);
       });
-      prepareForm(form);
       return form;
     };
 
     this.getForms = function () {
       var selector = options.tagName;
       if (options.className) selector += '.' + options.className;
-      return parent.find(selector);
+      return element.children(selector);
     };
 
     this.totalForms = function (num) {
@@ -84,6 +84,10 @@
       }
     };
 
+    this.totalVisibleForms = function () {
+      return this.getForms().filter(':visible').length;
+    };
+
     this.maxNumForms = function (num) {
       var maxNumField = $('#id_' + options.prefix + '-MAX_NUM_FORMS');
       if (typeof num === "undefined") {
@@ -93,11 +97,11 @@
       }
     };
 
-    this.addForm = function (parent, form) {
+    this.addForm = function (parentElement, form) {
       if (options.addForm) {
-        options.addForm.call(this, parent, form);
+        options.addForm.call(this, parentElement, form);
       }
-      parent.append(form);
+      parentElement.append(form);
     };
 
     this.deleteForm = function (form) {
@@ -107,19 +111,23 @@
       if (options.deleted) options.deleted.call(formset, form);
     };
 
+    this.canAddForm = function () {
+      return this.totalVisibleForms() < formset.maxNumForms();
+    };
+
     this._addHandler = function () {
-      var form = formset.createForm(),
-          formCount = formset.totalForms();
-      if (formCount >= formset.maxNumForms()) {
-        return;  // Don't make more than maximum
-      }
-      formset.totalForms(formCount + 1);
-      formset.addForm.call(formset, parent, form);
+      var form = formset.createForm();
+      if (!formset.canAddForm()) return;  // Don't make more than maximum
+      formset.totalForms(formset.totalForms() + 1);
+      formset.addForm.call(formset, formset.element, form);
+      prepareForm(form);
       if (options.added) options.added.call(formset, form);
       return false;
     };
 
     this.init();
+    this.element = element;
+    this.options = options;
 
   };
 
