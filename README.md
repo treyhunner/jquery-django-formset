@@ -13,6 +13,9 @@ Usage
       emptyFormSelector: 'tr.empty-form',
       deleteSelector: '.delete-row',
       addSelector: '.add-row',
+      addForm: function (parentElement, form) {
+        parentElement.append(form);  // This is the default
+      },
       added: function (form) {
         // Code that gets executed when form is added
       },

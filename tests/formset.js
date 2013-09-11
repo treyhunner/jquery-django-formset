@@ -12,9 +12,9 @@
   test('test template form fields cleared', function () {
     var element, formset;
     expect(5);
-    element = $('#form-with-data').djangoFormset();
+    element = $('#form-with-data').djangoFormset({tagName: 'tr'});
     formset = element.data('djangoFormset');
-    formset.addForm();
+    formset._addHandler();
     equal(element.find('tr').length, 2, 'two formsets');
     deepEqual(
       element.find('tr:first :input').serialize(),
@@ -34,12 +34,13 @@
     var element, formset;
     expect(7);
     element = $('#form-with-template').djangoFormset({
+      tagName: 'tr',
       className: 'form',
       emptyFormSelector: 'tr.empty-form',
     });
     formset = element.data('djangoFormset');
     equal(element.find('tr.form').length, 1, 'one formset');
-    formset.addForm();
+    formset._addHandler();
     equal(element.find('tr.form').length, 2, 'two formsets');
     equal(element.find('tr.form:visible').length, 2, 'both formsets visible');
     deepEqual(
@@ -60,11 +61,12 @@
     var element, formset;
     expect(6);
     element = $('#form-with-external-template').djangoFormset({
+      tagName: 'tr',
       emptyFormSelector: '.external-empty-form',
     });
     formset = element.data('djangoFormset');
     equal(element.find('tr').length, 1, 'one formset');
-    formset.addForm();
+    formset._addHandler();
     equal(element.find('tr').length, 2, 'two formsets');
     equal(element.find('tr:visible').length, 2, 'both formsets visible');
     deepEqual(
@@ -84,15 +86,16 @@
     var element, formset;
     expect(6);
     element = $('#form-with-custom-prefix').djangoFormset({
+      tagName: 'tr',
       prefix: 'prefix',
     });
     formset = element.data('djangoFormset');
     equal(element.find('tr').length, 1, 'one formset');
     equal(element.find('tr:last input').prop('name'), 'prefix-0-input', 'index 0');
-    formset.addForm();
+    formset._addHandler();
     equal(element.find('tr').length, 2, 'two formsets');
     equal(element.find('tr:last input').prop('name'), 'prefix-1-input', 'index 1');
-    formset.addForm();
+    formset._addHandler();
     equal(element.find('tr').length, 2, 'still only two formsets');
     equal(element.find('tr:last input').prop('name'), 'prefix-1-input', 'index 1 still');
   });
@@ -101,19 +104,21 @@
     var element, formset;
     expect(2);
     element = $('#single-form').djangoFormset({
+      tagName: 'tr',
       addSelector: '.add-form',
     });
     formset = element.data('djangoFormset');
-    sinon.stub(formset, "addForm", function () {});
+    sinon.stub(formset, "_addHandler", function () {});
     $('.add-form').trigger('click');
-    ok(formset.addForm.calledOnce);
-    equal(formset.addForm.firstCall.args.length, 0, 'addForm called without argument');
+    ok(formset._addHandler.calledOnce);
+    equal(formset._addHandler.firstCall.args.length, 0, '_addHandler called without argument');
   });
 
   test('test delete button selector', function () {
     var element, formset;
     expect(3);
     element = $('#multiple-forms').djangoFormset({
+      tagName: 'tr',
       deleteSelector: '.delete-form',
     });
     formset = element.data('djangoFormset');
@@ -124,9 +129,9 @@
     ok(formset.deleteForm.firstCall.args[0][0].isEqualNode(element.find('tr')[1]));
   });
 
-  module("Test $.djangoFormset#addForm", {
+  module("Test $.djangoFormset#_addHandler", {
     setup: function () {
-      this.element = $('#single-form').djangoFormset();
+      this.element = $('#single-form').djangoFormset({tagName: 'tr'});
       this.formset = this.element.data('djangoFormset');
       this.$ = function () { return this.element.find.apply(this.element, arguments); };
     },
@@ -138,10 +143,10 @@
     expect(6);
     equal(this.$('tr').length, 1, 'one formset');
     equal(this.$('tr:last input').prop('name'), 'form-0-input', 'index 0');
-    this.formset.addForm();
+    this.formset._addHandler();
     equal(this.$('tr').length, 2, 'two formsets');
     equal(this.$('tr:last input').prop('name'), 'form-1-input', 'index 1');
-    this.formset.addForm();
+    this.formset._addHandler();
     equal(this.$('tr').length, 3, 'three formsets');
     equal(this.$('tr:last input').prop('name'), 'form-2-input', 'index 2');
   });
@@ -150,11 +155,11 @@
     var i;
     expect(4);
     for (i = 0; i < 10; i++) {
-      this.formset.addForm();
+      this.formset._addHandler();
     }
     equal(this.$('tr').length, 10, 'ten formsets');
     equal(this.$('tr:last input').prop('name'), 'form-9-input', 'index 9');
-    this.formset.addForm();
+    this.formset._addHandler();
     equal(this.$('tr').length, 10, 'still only ten formsets');
     equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
   });
@@ -162,6 +167,7 @@
   module("Test $.djangoFormset#deleteForm", {
     setup: function () {
       this.element = $('#multiple-forms').djangoFormset({
+        tagName: 'tr',
         formSelector: 'tr',
       });
       this.formset = this.element.data('djangoFormset');
@@ -186,11 +192,12 @@
     expect(4);
     callback = sinon.spy();
     element = $('#multiple-forms').djangoFormset({
+      tagName: 'tr',
       formSelector: 'tr',
       added: callback,
     });
     formset = element.data('djangoFormset');
-    formset.addForm();
+    formset._addHandler();
     equal(element.find('tr').length, 3, 'three formsets');
     ok(callback.calledOnce, 'added callback called exactly once');
     ok(callback.args[0][0][0].isEqualNode(element.find('tr:last')[0]), 'called with new form');

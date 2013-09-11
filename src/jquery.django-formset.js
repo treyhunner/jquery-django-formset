@@ -15,10 +15,7 @@
   };
 
   $.djangoFormset = function (parent, options) {
-    var totalField = $('#id_' + options.prefix + '-TOTAL_FORMS'),
-        maxNumField = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
-        formset = this,
-        templateForm;
+    var formset = this, templateForm;
 
     function clearForm(form) {
       form.find(':input').each(function () {
@@ -48,8 +45,7 @@
       // Listen to add button click event
       if (options.addSelector) {
         $(options.addSelector).click(function () {
-          formset.addForm();
-          return false;
+          return formset._addHandler();
         });
       }
 
@@ -64,30 +60,63 @@
       }
     };
 
+    this.createForm = function () {
+      var form = templateForm.clone(true);
+      form.find(':input').each(function () {
+        updateFieldIndex($(this), options.prefix, formset.totalForms());
+      });
+      prepareForm(form);
+      return form;
+    };
+
     this.getForms = function () {
       var selector = options.tagName;
       if (options.className) selector += '.' + options.className;
       return parent.find(selector);
     };
 
+    this.totalForms = function (num) {
+      var totalField = $('#id_' + options.prefix + '-TOTAL_FORMS');
+      if (typeof num === "undefined") {
+        return parseInt(totalField.val(), 10);
+      } else {
+        return totalField.val(num);
+      }
+    };
+
+    this.maxNumForms = function (num) {
+      var maxNumField = $('#id_' + options.prefix + '-MAX_NUM_FORMS');
+      if (typeof num === "undefined") {
+        return parseInt(maxNumField.val(), 10);
+      } else {
+        return maxNumField.val(num);
+      }
+    };
+
+    this.addForm = function (parent, form) {
+      if (options.addForm) {
+        options.addForm.call(this, parent, form);
+      }
+      parent.append(form);
+    };
+
     this.deleteForm = function (form) {
       form.find(':input[id$="-DELETE"]').prop('checked', true);
       form.hide();
-      totalField.val(formset.getForms().length);
+      formset.totalForms(formset.getForms().length);
       if (options.deleted) options.deleted.call(formset, form);
     };
 
-    this.addForm = function () {
-      var form = templateForm.clone(true),
-          formCount = parseInt(totalField.val(), 10);
-      if (formCount >= parseInt(maxNumField.val(), 10)) return;  // Don't make more than maximum
-      this.getForms().filter(':last').after(form);
-      form.find(':input').each(function () {
-        updateFieldIndex($(this), options.prefix, formCount);
-      });
-      totalField.val(formCount + 1);
-      prepareForm(form);
+    this._addHandler = function () {
+      var form = formset.createForm(),
+          formCount = formset.totalForms();
+      if (formCount >= formset.maxNumForms()) {
+        return;  // Don't make more than maximum
+      }
+      formset.totalForms(formCount + 1);
+      formset.addForm.call(formset, parent, form);
       if (options.added) options.added.call(formset, form);
+      return false;
     };
 
     this.init();
@@ -102,11 +131,12 @@
 
   $.fn.djangoFormset.defaults = {
     prefix: 'form',
-    tagName: 'tr',
+    tagName: 'div',
     className: '',
     emptyFormSelector: null,
     deleteSelector: null,
     addSelector: null,
+    addForm: null,
     added: null,
     deleted: null
   };
