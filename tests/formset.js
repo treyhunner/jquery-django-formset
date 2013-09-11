@@ -30,6 +30,51 @@
     equal(element.find('tr:last .errorlist').length, 0, 'error list not present');
   });
 
+  module('Test $.djangoFormset#totalForms');
+
+  test('test totalForms retrieval', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    $('#id_form-TOTAL_FORMS').val(20);
+    equal(element.data('djangoFormset').totalForms(), 20);
+  });
+
+  test('test totalForms assignment', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    element.data('djangoFormset').totalForms(30);
+    equal($('#id_form-TOTAL_FORMS').val(), 30);
+  });
+
+
+  module('Test $.djangoFormset#maxNumForms');
+
+  test('test maxNumForms retrieval', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    $('#id_form-MAX_NUM_FORMS').val(20);
+    equal(element.data('djangoFormset').maxNumForms(), 20);
+  });
+
+  test('test maxNumForms assignment', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    element.data('djangoFormset').maxNumForms(30);
+    equal($('#id_form-MAX_NUM_FORMS').val(), 30);
+  });
+
   test('test empty form template', function () {
     var element, formset;
     expect(7);
