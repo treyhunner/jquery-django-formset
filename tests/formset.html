@@ -42,6 +42,49 @@
       </table>
     </div>
 
+    <div id="form-with-template">
+      <table>
+        <tr class="form">
+          <td>
+            <select name="form-0-select">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="empty-form" style="display: none;">
+          <td>
+            <select name="form-__prefix__-select">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="form-with-external-template">
+      <table>
+        <tr>
+          <td>
+            <select name="form-0-select">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <script type="template/html" class="external-empty-form">
+      <td>
+        <select name="form-__prefix__-select">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+        </select>
+      </td>
+    </script>
+
     <div id="multiple-forms">
       <table>
         <tr>

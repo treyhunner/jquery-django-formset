@@ -1,10 +1,10 @@
-/* jQuery Django Formset v0.1 | http://th.mit-license.org/2013 */
+/* jQuery Django Formset v0.2 | http://th.mit-license.org/2013 */
 (function ($) {
 
   'use strict';
 
   var updateFieldIndex = function (field, prefix, index) {
-    var regex = new RegExp(prefix + '-(\\d+)-'),
+    var regex = new RegExp(prefix + '-(\\d+|__prefix__)-'),
         replacement = prefix + '-' + index + '-';
     $.each(['for', 'id', 'name'], function (i, attr) {
       var value = field.prop(attr);
@@ -54,12 +54,20 @@
       }
 
       // Set teplate form
-      templateForm = this.getForms().filter(':last').clone(true);
-      clearForm(templateForm);
+      if (options.emptyFormSelector) {
+        templateForm = $('<' + options.tagName + '>');
+        templateForm.html($(options.emptyFormSelector).html());
+        if (options.className) templateForm.addClass(options.className);
+      } else {
+        templateForm = this.getForms().filter(':last').clone(true);
+        clearForm(templateForm);
+      }
     };
 
     this.getForms = function () {
-      return parent.find(options.formSelector);
+      var selector = options.tagName;
+      if (options.className) selector += '.' + options.className;
+      return parent.find(selector);
     };
 
     this.deleteForm = function (form) {
@@ -94,7 +102,9 @@
 
   $.fn.djangoFormset.defaults = {
     prefix: 'form',
-    formSelector: null,
+    tagName: 'tr',
+    className: '',
+    emptyFormSelector: null,
     deleteSelector: null,
     addSelector: null,
     added: null,

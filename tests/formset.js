@@ -12,7 +12,7 @@
   test('test template form fields cleared', function () {
     var element, formset;
     expect(5);
-    element = $('#form-with-data').djangoFormset({formSelector: 'tr'});
+    element = $('#form-with-data').djangoFormset();
     formset = element.data('djangoFormset');
     formset.addForm();
     equal(element.find('tr').length, 2, 'two formsets');
@@ -30,11 +30,60 @@
     equal(element.find('tr:last .errorlist').length, 0, 'error list not present');
   });
 
+  test('test empty form template', function () {
+    var element, formset;
+    expect(7);
+    element = $('#form-with-template').djangoFormset({
+      className: 'form',
+      emptyFormSelector: 'tr.empty-form',
+    });
+    formset = element.data('djangoFormset');
+    equal(element.find('tr.form').length, 1, 'one formset');
+    formset.addForm();
+    equal(element.find('tr.form').length, 2, 'two formsets');
+    equal(element.find('tr.form:visible').length, 2, 'both formsets visible');
+    deepEqual(
+      element.find('tr.form:first :input').serialize(),
+      'form-0-select=2',
+      'initial form is unchanged'
+    );
+    deepEqual(
+      element.find('tr.form:last :input').serialize(),
+      'form-1-select=1',
+      'new form is set to defaults'
+    );
+    equal(element.find('tr.form.empty-form').length, 0, 'empty-form class removed');
+    equal(element.find('tr.empty-form').not(':visible').length, 1, 'empty form not visible');
+  });
+
+  test('test external empty form template', function () {
+    var element, formset;
+    expect(6);
+    element = $('#form-with-external-template').djangoFormset({
+      emptyFormSelector: '.external-empty-form',
+    });
+    formset = element.data('djangoFormset');
+    equal(element.find('tr').length, 1, 'one formset');
+    formset.addForm();
+    equal(element.find('tr').length, 2, 'two formsets');
+    equal(element.find('tr:visible').length, 2, 'both formsets visible');
+    deepEqual(
+      element.find('tr:first :input').serialize(),
+      'form-0-select=2',
+      'initial form is unchanged'
+    );
+    deepEqual(
+      element.find('tr:last :input').serialize(),
+      'form-1-select=1',
+      'new form is set to defaults'
+    );
+    equal(element.find('tr.empty-form').length, 0, 'empty-form class removed');
+  });
+
   test('test prefix specified', function () {
     var element, formset;
     expect(6);
     element = $('#form-with-custom-prefix').djangoFormset({
-      formSelector: 'tr',
       prefix: 'prefix',
     });
     formset = element.data('djangoFormset');
@@ -52,7 +101,6 @@
     var element, formset;
     expect(2);
     element = $('#single-form').djangoFormset({
-      formSelector: 'tr',
       addSelector: '.add-form',
     });
     formset = element.data('djangoFormset');
@@ -66,7 +114,6 @@
     var element, formset;
     expect(3);
     element = $('#multiple-forms').djangoFormset({
-      formSelector: 'tr',
       deleteSelector: '.delete-form',
     });
     formset = element.data('djangoFormset');
@@ -79,9 +126,7 @@
 
   module("Test $.djangoFormset#addForm", {
     setup: function () {
-      this.element = $('#single-form').djangoFormset({
-        formSelector: 'tr',
-      });
+      this.element = $('#single-form').djangoFormset();
       this.formset = this.element.data('djangoFormset');
       this.$ = function () { return this.element.find.apply(this.element, arguments); };
     },

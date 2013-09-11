@@ -8,7 +8,9 @@ Usage
 -----
 
     $('table.my-formset').djangoFormset({
-      formSelector: 'tr.form',
+      tagName: 'tr',
+      className: 'form',
+      emptyFormSelector: 'tr.empty-form',
       deleteSelector: '.delete-row',
       addSelector: '.add-row',
       added: function (form) {
