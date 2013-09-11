@@ -32,8 +32,7 @@
     function prepareForm(form) {
       if (options.deleteSelector) {
         form.on('click', options.deleteSelector, function () {
-          formset.deleteForm(form);
-          return false;
+          return formset._deleteHandler(form);
         });
       }
     }
@@ -58,6 +57,7 @@
         templateForm = this.getForms().filter(':last').clone(false);
         clearForm(templateForm);
       }
+      this.changeHandler();
     };
 
     this.createForm = function () {
@@ -109,7 +109,14 @@
     };
 
     this.canAddForm = function () {
-      return this.totalVisibleForms() < formset.maxNumForms();
+      return this.totalVisibleForms() < this.maxNumForms();
+    };
+
+    // Called when form added or deleted
+    this.changeHandler = function () {
+      element.find(options.deleteSelector).toggle(
+        options.minForms < this.totalVisibleForms());
+      $(options.addSelector).toggle(this.canAddForm());
     };
 
     this._addHandler = function () {
@@ -119,12 +126,19 @@
       formset.addForm.call(formset, formset.element, form);
       prepareForm(form);
       if (options.added) options.added.call(formset, form);
+      this.changeHandler();
       return false;
     };
 
-    this.init();
+    this._deleteHandler = function (form) {
+      formset.deleteForm(form);
+      this.changeHandler();
+      return false;
+    };
+
     this.element = element;
     this.options = options;
+    this.init();
 
   };
 
@@ -138,6 +152,7 @@
     prefix: 'form',
     tagName: 'div',
     className: '',
+    minForms: 0,
     emptyFormSelector: null,
     deleteSelector: null,
     addSelector: null,

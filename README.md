@@ -13,6 +13,7 @@ Usage
       emptyFormSelector: 'tr.empty-form',
       deleteSelector: '.delete-row',
       addSelector: '.add-row',
+      minForms: 1,
       addForm: function (parentElement, form) {
         parentElement.append(form);  // This is the default
       },

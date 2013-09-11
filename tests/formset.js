@@ -7,6 +7,7 @@
 
   'use strict';
 
+
   module('Test $.djangoFormset#init');
 
   test('test template form fields cleared', function () {
@@ -28,51 +29,6 @@
     );
     equal(element.find('tr:first .errorlist').length, 1, 'errorlist present');
     equal(element.find('tr:last .errorlist').length, 0, 'error list not present');
-  });
-
-  module('Test $.djangoFormset#totalForms');
-
-  test('test totalForms retrieval', function () {
-    expect(1);
-    var element = $('#single-form').djangoFormset({
-      tagName: 'tr',
-      addSelector: '.add-form',
-    });
-    $('#id_form-TOTAL_FORMS').val(20);
-    equal(element.data('djangoFormset').totalForms(), 20);
-  });
-
-  test('test totalForms assignment', function () {
-    expect(1);
-    var element = $('#single-form').djangoFormset({
-      tagName: 'tr',
-      addSelector: '.add-form',
-    });
-    element.data('djangoFormset').totalForms(30);
-    equal($('#id_form-TOTAL_FORMS').val(), 30);
-  });
-
-
-  module('Test $.djangoFormset#maxNumForms');
-
-  test('test maxNumForms retrieval', function () {
-    expect(1);
-    var element = $('#single-form').djangoFormset({
-      tagName: 'tr',
-      addSelector: '.add-form',
-    });
-    $('#id_form-MAX_NUM_FORMS').val(20);
-    equal(element.data('djangoFormset').maxNumForms(), 20);
-  });
-
-  test('test maxNumForms assignment', function () {
-    expect(1);
-    var element = $('#single-form').djangoFormset({
-      tagName: 'tr',
-      addSelector: '.add-form',
-    });
-    element.data('djangoFormset').maxNumForms(30);
-    equal($('#id_form-MAX_NUM_FORMS').val(), 30);
   });
 
   test('test empty form template', function () {
@@ -174,9 +130,59 @@
     ok(formset.deleteForm.firstCall.args[0][0].isEqualNode(element.find('tr')[1]));
   });
 
+
+  module('Test $.djangoFormset#totalForms');
+
+  test('test totalForms retrieval', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    $('#id_form-TOTAL_FORMS').val(20);
+    equal(element.data('djangoFormset').totalForms(), 20);
+  });
+
+  test('test totalForms assignment', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    element.data('djangoFormset').totalForms(30);
+    equal($('#id_form-TOTAL_FORMS').val(), 30);
+  });
+
+
+  module('Test $.djangoFormset#maxNumForms');
+
+  test('test maxNumForms retrieval', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    $('#id_form-MAX_NUM_FORMS').val(20);
+    equal(element.data('djangoFormset').maxNumForms(), 20);
+  });
+
+  test('test maxNumForms assignment', function () {
+    expect(1);
+    var element = $('#single-form').djangoFormset({
+      tagName: 'tr',
+      addSelector: '.add-form',
+    });
+    element.data('djangoFormset').maxNumForms(30);
+    equal($('#id_form-MAX_NUM_FORMS').val(), 30);
+  });
+
+
   module('Test $.djangoFormset#_addHandler', {
     setup: function () {
-      this.element = $('#single-form').djangoFormset({tagName: 'tr'});
+      this.element = $('#single-form').djangoFormset({
+        tagName: 'tr',
+        addSelector: '.add-form',
+      });
       this.formset = this.element.data('djangoFormset');
       this.$ = function () { return this.element.find.apply(this.element, arguments); };
     },
@@ -198,22 +204,29 @@
 
   test('test maximum forms', function () {
     var i;
-    expect(4);
-    for (i = 0; i < 10; i++) {
+    expect(15);
+    for (i = 0; i < 9; i++) {
+      ok($('.add-form').is(':visible'), 'add button visible');
       this.formset._addHandler();
     }
+    ok($('.add-form').not(':visible'), 'add button not visible');
     equal(this.$('tr').length, 10, 'ten formsets');
     equal(this.$('tr:last input').prop('name'), 'form-9-input', 'index 9');
+
     this.formset._addHandler();
+    ok($('.add-form').not(':visible'), 'add button not visible');
     equal(this.$('tr').length, 10, 'still only ten formsets');
     equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
   });
+
 
   module('Test $.djangoFormset#deleteForm', {
     setup: function () {
       this.element = $('#multiple-forms').djangoFormset({
         tagName: 'tr',
         formSelector: 'tr',
+        deleteSelector: '.delete-form',
+        minForms: 1,
       });
       this.formset = this.element.data('djangoFormset');
       this.$ = function () { return this.element.find.apply(this.element, arguments); };
@@ -223,12 +236,17 @@
   });
 
   test('form deleting checks DELETE checkbox', function () {
-    expect(3);
-    this.formset.deleteForm(this.$('tr:first'));
-    equal(this.$('tr').length, 2, 'two formsets still');
+    expect(7);
+    equal(this.$('.delete-form:visible').length, 2);
+    this.formset._deleteHandler(this.$('tr:first'));
+    equal(this.$('.delete-form:visible').length, 0);
+    equal(this.$('tr').length, 2, 'two forms still');
     equal(this.$('tr:first input[id$=DELETE]').prop('checked'), true);
     equal(this.$('tr:last input[id$=DELETE]').prop('checked'), false);
+    ok(this.$('tr:first').not(':visible'), 'first form hidden');
+    ok(this.$('tr:last').not(':visible'), 'second form visible');
   });
+
 
   module('Test add/delete form callbacks');
 
@@ -265,5 +283,6 @@
     ok(callback.args[0][0][0].isEqualNode(element.find('tr:first')[0]), 'called with first form');
     equal(callback.thisValues[0], formset, 'callback called in context of formset');
   });
+
 
 }(jQuery));
