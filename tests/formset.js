@@ -7,7 +7,7 @@
 
   'use strict';
 
-  module("Test $.djangoFormset#init");
+  module('Test $.djangoFormset#init');
 
   test('test template form fields cleared', function () {
     var element, formset;
@@ -108,7 +108,7 @@
       addSelector: '.add-form',
     });
     formset = element.data('djangoFormset');
-    sinon.stub(formset, "_addHandler", function () {});
+    sinon.stub(formset, '_addHandler', function () {});
     $('.add-form').trigger('click');
     ok(formset._addHandler.calledOnce);
     equal(formset._addHandler.firstCall.args.length, 0, '_addHandler called without argument');
@@ -122,14 +122,14 @@
       deleteSelector: '.delete-form',
     });
     formset = element.data('djangoFormset');
-    sinon.stub(formset, "deleteForm", function () {});
+    sinon.stub(formset, 'deleteForm', function () {});
     element.find('tr:last .delete-form').trigger('click');
     ok(formset.deleteForm.calledOnce);
     equal(formset.deleteForm.firstCall.args.length, 1, 'deleteForm called with 1 argument');
     ok(formset.deleteForm.firstCall.args[0][0].isEqualNode(element.find('tr')[1]));
   });
 
-  module("Test $.djangoFormset#_addHandler", {
+  module('Test $.djangoFormset#_addHandler', {
     setup: function () {
       this.element = $('#single-form').djangoFormset({tagName: 'tr'});
       this.formset = this.element.data('djangoFormset');
@@ -164,7 +164,7 @@
     equal(this.$('tr:last input').prop('name'), 'form-9-input', 'still index 9');
   });
 
-  module("Test $.djangoFormset#deleteForm", {
+  module('Test $.djangoFormset#deleteForm', {
     setup: function () {
       this.element = $('#multiple-forms').djangoFormset({
         tagName: 'tr',
@@ -185,7 +185,7 @@
     equal(this.$('tr:last input[id$=DELETE]').prop('checked'), false);
   });
 
-  module("Test add/delete form callbacks");
+  module('Test add/delete form callbacks');
 
   test('Test added callback', function () {
     var element, formset, callback;

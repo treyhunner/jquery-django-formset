@@ -77,7 +77,7 @@
 
     this.totalForms = function (num) {
       var totalField = $('#id_' + options.prefix + '-TOTAL_FORMS');
-      if (typeof num === "undefined") {
+      if (typeof num === 'undefined') {
         return parseInt(totalField.val(), 10);
       } else {
         return totalField.val(num);
@@ -90,7 +90,7 @@
 
     this.maxNumForms = function (num) {
       var maxNumField = $('#id_' + options.prefix + '-MAX_NUM_FORMS');
-      if (typeof num === "undefined") {
+      if (typeof num === 'undefined') {
         return parseInt(maxNumField.val(), 10);
       } else {
         return maxNumField.val(num);
@@ -98,9 +98,6 @@
     };
 
     this.addForm = function (parentElement, form) {
-      if (options.addForm) {
-        options.addForm.call(this, parentElement, form);
-      }
       parentElement.append(form);
     };
 
@@ -144,7 +141,6 @@
     emptyFormSelector: null,
     deleteSelector: null,
     addSelector: null,
-    addForm: null,
     added: null,
     deleted: null
   };
