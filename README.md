@@ -32,9 +32,15 @@ Advanced Usage:
       }
     });
 
+Contributing
+------------
+
+Please read the [CONTRIBUTING.md][] file before submitting an issue or pull request.
+
 License
 -------
 
 Distributed under [MIT License][]
 
 [MIT License]: http://th.mit-license.org/2013
+[CONTRIBUTING.md]: CONTRIBUTING.md
