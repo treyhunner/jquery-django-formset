@@ -7,16 +7,23 @@ jQuery Django Formset
 Usage
 -----
 
+Basic Usage:
+
+    $('table.my-formset').djangoFormset({
+      tagName: 'tr',
+      deleteSelector: '.delete-form',
+      addSelector: '.add-form'
+    });
+
+Advanced Usage:
+
     $('table.my-formset').djangoFormset({
       tagName: 'tr',
       className: 'form',
       emptyFormSelector: 'tr.empty-form',
-      deleteSelector: '.delete-row',
-      addSelector: '.add-row',
+      deleteSelector: '.delete-form',
+      addSelector: '.add-form',
       minForms: 1,
-      addForm: function (parentElement, form) {
-        parentElement.append(form);  // This is the default
-      },
       added: function (form) {
         // Code that gets executed when form is added
       },
