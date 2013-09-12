@@ -32,7 +32,7 @@
     function prepareForm(form) {
       if (options.deleteSelector) {
         form.on('click', options.deleteSelector, function () {
-          return formset._deleteHandler(form);
+          return formset.deleteHandler(form);
         });
       }
     }
@@ -44,7 +44,7 @@
       // Listen to add button click event
       if (options.addSelector) {
         $(options.addSelector).click(function () {
-          return formset._addHandler();
+          return formset.addHandler();
         });
       }
 
@@ -52,7 +52,9 @@
       if (options.emptyFormSelector) {
         templateForm = $('<' + options.tagName + '>');
         templateForm.html($(options.emptyFormSelector).html());
-        if (options.className) templateForm.addClass(options.className);
+        if (options.className) {
+          templateForm.addClass(options.className);
+        }
       } else {
         templateForm = this.getForms().filter(':last').clone(false);
         clearForm(templateForm);
@@ -71,7 +73,9 @@
 
     this.getForms = function () {
       var selector = options.tagName;
-      if (options.className) selector += '.' + options.className;
+      if (options.className) {
+        selector += '.' + options.className;
+      }
       return element.children(selector);
     };
 
@@ -105,7 +109,9 @@
       form.find(':input[id$="-DELETE"]').prop('checked', true);
       form.hide();
       formset.totalForms(formset.getForms().length);
-      if (options.deleted) options.deleted.call(formset, form);
+      if (options.deleted) {
+        options.deleted.call(formset, form);
+      }
     };
 
     this.canAddForm = function () {
@@ -119,18 +125,22 @@
       $(options.addSelector).toggle(this.canAddForm());
     };
 
-    this._addHandler = function () {
+    this.addHandler = function () {
       var form = formset.createForm();
-      if (!formset.canAddForm()) return;  // Don't make more than maximum
+      if (!formset.canAddForm()) {
+        return;  // Don't make more than maximum
+      }
       formset.totalForms(formset.totalForms() + 1);
       formset.addForm.call(formset, formset.element, form);
       prepareForm(form);
-      if (options.added) options.added.call(formset, form);
+      if (options.added) {
+        options.added.call(formset, form);
+      }
       this.changeHandler();
       return false;
     };
 
-    this._deleteHandler = function (form) {
+    this.deleteHandler = function (form) {
       formset.deleteForm(form);
       this.changeHandler();
       return false;
